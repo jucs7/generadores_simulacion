@@ -1,3 +1,5 @@
+import math
+
 def congruencial_mixto():
     # Parámetros
     Xn = int(input("Semilla: "))
@@ -10,6 +12,26 @@ def congruencial_mixto():
         print("Error: Por favor ingresa valores adecuados para los parámetros.")
         return
 
+    # Verificar si 'a' es impar y no divisible por 3 o 5
+    if a % 2 == 0 or a % 3 == 0 or a % 5 == 0:
+        print("Error: El multiplicador 'a' debe ser un entero impar no divisible por 3 o 5.")
+        return
+
+    # Verificar si 'c' es impar
+    if c % 2 == 0:
+        print("Error: La constante aditiva 'c' debe ser un entero impar.")
+        return
+
+    # Verificar si 'c' y 'm' son primos entre sí
+    def gcd(a, b):
+        while b != 0:
+            a, b = b, a % b
+        return a
+
+    if gcd(c, m) != 1:
+        print("Error: 'c' debe ser relativamente primo a 'm'.")
+        return
+        
     # Conjunto para almacenar los números generados
     generados = set()
     print("\nNumeros generados: ")
@@ -35,6 +57,17 @@ def congruencial_multiplicativo():
     if not (0 < Xn < m and 0 < a < m and 0 < m):
         print("Error: Por favor ingresa valores adecuados para los parámetros.")
         return
+
+    # Verificar si Xn es impar no divisible por 2 o 5
+    while Xn % 2 == 0 or Xn % 5 == 0 or Xn % 2 == 0:
+        Xn += 1
+
+    # Verificar si Xn es relativamente primo a m
+    while math.gcd(Xn, m) != 1:
+        Xn += 2  # Avanzar al siguiente número impar
+        # Si llegamos a un valor mayor o igual a m, volvemos a 1
+        if Xn >= m:
+            Xn = 1
 
     # Conjunto para almacenar los números generados
     generados = set()
