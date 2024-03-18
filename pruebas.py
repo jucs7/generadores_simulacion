@@ -1,6 +1,5 @@
 import csv
 import math
-from re import sub
 from scipy.stats import chi2 # Libreria para la tabla de chi cuadrado
 
 # Leer archivo .csv con los numeros generados
