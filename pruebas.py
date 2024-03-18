@@ -34,6 +34,7 @@ def promedios(numeros):
 
 	return True if abs(Z_0) < alfa else False
 
+# Prueba de frecuencias
 def frecuencias(numeros):
 	# Parametros
 	N = len(numeros)
@@ -68,6 +69,7 @@ def frecuencias(numeros):
 	print(X2_an)
 	return True if X2_0 < X2_an else False
 
+# Prueba de series
 def series(numeros):
 	# Parametros
 	N = len(numeros)
