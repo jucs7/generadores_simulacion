@@ -1,8 +1,10 @@
-import math
+import math # Funcion para el MCD
+import csv
 
 def congruencial_mixto():
     # Parámetros
     Xn = int(input("Semilla: "))
+    X_0 = Xn
     a = int(input("Multiplicador: "))
     c = int(input("Constante aditiva: "))
     m = int(input("Modulo: "))
@@ -12,28 +14,11 @@ def congruencial_mixto():
         print("Error: Por favor ingresa valores adecuados para los parámetros.")
         return
 
-    # Verificar si 'a' es impar y no divisible por 3 o 5
-    if a % 2 == 0 or a % 3 == 0 or a % 5 == 0:
-        print("Error: El multiplicador 'a' debe ser un entero impar no divisible por 3 o 5.")
-        return
+    validar_mixto(a,c,m)
 
-    # Verificar si 'c' es impar
-    if c % 2 == 0:
-        print("Error: La constante aditiva 'c' debe ser un entero impar.")
-        return
-
-    # Verificar si 'c' y 'm' son primos entre sí
-    def gcd(a, b):
-        while b != 0:
-            a, b = b, a % b
-        return a
-
-    if gcd(c, m) != 1:
-        print("Error: 'c' debe ser relativamente primo a 'm'.")
-        return
-        
-    # Conjunto para almacenar los números generados
-    generados = set()
+    # Listas para almacenar los números generados
+    generados = []
+    normalizados = []
     print("\nNumeros generados: ")
     
     while True:
@@ -43,13 +28,44 @@ def congruencial_mixto():
         if Xn in generados:
             break
         # Agregar el número generado al conjunto
-        generados.add(Xn)
+        generados.append(Xn)
+        # Normalizamos el número para que esté entre 0 y 1
+        normalizados.append(Xn / m) 
         # Imprimir el número generado
-        print(Xn / m)  # Normalizamos el número para que esté entre 0 y 1
+        print(Xn / m)  
+
+    # Escribir los números generados en un archivo CSV
+    with open('generados.csv', mode='w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(['n;Xn;Generados'])
+        writer.writerow([f"0;{X_0}"])
+        for i in range(0, len(generados)):
+            writer.writerow([f"{i+1};{generados[i]};{normalizados[i]}"])
+
+    print("Archivo 'generados.csv' creado satisfactoriamente con los números generados.")
+
+def validar_mixto(a, c, m):
+    # Verificar si 'a' es impar y no divisible por 3 o 5
+    if a % 2 == 0 or a % 3 == 0 or a % 5 == 0:
+        print("Warning: El multiplicador 'a' debe ser un entero impar no divisible por 3 o 5.")
+
+    # Verificar si 'c' es impar
+    if c % 2 == 0:
+        print("Warning: La constante aditiva 'c' debe ser un entero impar.")
+
+    # Verificar si 'c' y 'm' son primos entre sí
+    def gcd(a, b):
+        while b != 0:
+            a, b = b, a % b
+        return a
+
+    if gcd(c, m) != 1:
+        print("Warning: 'c' debe ser relativamente primo a 'm'.")
 
 def congruencial_multiplicativo():
     # Parámetros
     Xn = int(input("\nSemilla: "))
+    X_0 = Xn
     a = int(input("Multiplicador: "))
     m = int(input("Modulo: "))
 
@@ -58,19 +74,13 @@ def congruencial_multiplicativo():
         print("Error: Por favor ingresa valores adecuados para los parámetros.")
         return
 
-    # Verificar si Xn es impar no divisible por 2 o 5
-    while Xn % 2 == 0 or Xn % 5 == 0 or Xn % 2 == 0:
-        Xn += 1
+    # Validar si m es primo
+    if not validar_multiplicativo(m):
+        print("Warning: El valor de 'm' no es primo.")
 
-    # Verificar si Xn es relativamente primo a m
-    while math.gcd(Xn, m) != 1:
-        Xn += 2  # Avanzar al siguiente número impar
-        # Si llegamos a un valor mayor o igual a m, volvemos a 1
-        if Xn >= m:
-            Xn = 1
-
-    # Conjunto para almacenar los números generados
-    generados = set()
+    # Listas para almacenar los números generados
+    generados = []
+    normalizados = []
     print("\nNumeros generados: ")
 
     while True:
@@ -80,9 +90,35 @@ def congruencial_multiplicativo():
         if Xn in generados:
             break
         # Agregar el número generado al conjunto
-        generados.add(Xn)
+        generados.append(Xn)
+        normalizados.append(Xn / m)
         # Imprimir el número generado
         print(Xn / m)  # Normalizamos el número para que esté entre 0 y 1
+
+    # Escribir los números generados en un archivo CSV
+    with open('generados.csv', mode='w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(['n;Xn;Generados'])
+        writer.writerow([f"0;{X_0}"])
+        for i in range(0, len(generados)):
+            writer.writerow([f"{i+1};{generados[i]};{normalizados[i]}"])
+
+    print("Archivo 'generados.csv' creado satisfactoriamente con los números generados.")
+
+def validar_multiplicativo(m):
+    # Validar si m es primo
+    if m <= 1:
+        return False
+    if m <= 3:
+        return True
+    if m % 2 == 0 or m % 3 == 0:
+        return False
+    i = 5
+    while i * i <= m:
+        if m % i == 0 or m % (i + 2) == 0:
+            return False
+        i += 6
+    return True
 
 def cuadrados_medios():
     # Parametros
