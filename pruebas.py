@@ -122,6 +122,7 @@ def series(numeros):
 	else:
 		print("Los numeros pseudoaleatorios NO provienen de una distribución uniforme")
 
+# Prueba de Kolmogorov-Smirnov
 def kolmogorov_smirnov(numeros):
 	n = len(numeros)
 	F_0 = sorted(numeros) # # Distribucion acumulada hipotética
@@ -145,7 +146,12 @@ def kolmogorov_smirnov(numeros):
 		print("Los numeros pseudoaleatorios provienen de una distribución uniforme")
 	else:
 		print("Los numeros pseudoaleatorios NO provienen de una distribución uniforme")
-	
+
+# Prueba de las corridas arriba y abajo del promedio
+def corridas_promedio(numeros):
+
+	return 0
+
 
 numeros_generados = leer_csv('generados.csv')
 print("Lista de números:", numeros_generados)
