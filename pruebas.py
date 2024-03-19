@@ -1,6 +1,5 @@
 import csv
 import math
-from tkinter import N
 from scipy.stats import chi2 # Libreria para la tabla de chi cuadrado
 from scipy.stats import kstwobign # Librería para la tabla de valores criticos de Kolmogorov-Smirnov
 
