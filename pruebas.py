@@ -8,7 +8,7 @@ def leer_csv(archivo):
 	with open(archivo, 'r') as archivo_csv:
 		lector_csv = csv.reader(archivo_csv)
 		for fila in lector_csv:
-      # Suponiendo que la columna de números está en la primera posición
+      		# Suponiendo que la columna de números está en la primera posición
 			numero = float(fila[0])  # Convertimos a float si es necesario
 			numeros.append(numero)
 	return numeros
@@ -62,10 +62,6 @@ def frecuencias(numeros):
 	for i in range(0,n):
 		X2_0 += (FO[i] - FE)**2 / FE
 
-	print(FE)
-	print(FO)
-	print(X2_0)
-	print(X2_an)
 	return True if X2_0 < X2_an else False
 
 # Prueba de series
@@ -105,9 +101,13 @@ def series(numeros):
 		for j in range(0,n):
 			X2_0 = X2_0 + (FO[i][j] - FE)**2
 	X2_0 = ((n**2)/(N - 1)) * X2_0
-	X2_a = chi2.ppf(alfa, (n**2)-1)
+	X2_a = chi2.ppf(1-alfa, (n**2)-1)
 
 	return True if X2_0 < X2_a else False
+
+def kolmogorov_smirnov(numeros):
+
+	return 0
 
 numeros_generados = leer_csv('generados.csv')
 print("Lista de números:", numeros_generados)
