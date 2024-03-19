@@ -1,6 +1,8 @@
 import csv
 import math
+from tkinter import N
 from scipy.stats import chi2 # Libreria para la tabla de chi cuadrado
+from scipy.stats import kstwobign # Librería para la tabla de valores criticos de Kolmogorov-Smirnov
 
 # Leer archivo .csv con los numeros generados
 def leer_csv(archivo):
@@ -31,7 +33,10 @@ def promedios(numeros):
 	Z_0 = ((aritmetica - media)*(math.sqrt(N)))/varianza
 	print("Estadistico: ", Z_0)
 
-	return True if abs(Z_0) < alfa else False
+	if abs(Z_0) < alfa:
+		print("Los numeros pseudoaleatorios provienen de una distribución uniforme")
+	else:
+		print("Los numeros pseudoaleatorios NO provienen de una distribución uniforme")
 
 # Prueba de frecuencias
 def frecuencias(numeros):
@@ -62,7 +67,13 @@ def frecuencias(numeros):
 	for i in range(0,n):
 		X2_0 += (FO[i] - FE)**2 / FE
 
-	return True if X2_0 < X2_an else False
+	print("Valor del estadistico: ", X2_0)
+	print("Valor de chi cuadrado: ", X2_an)
+
+	if X2_0 < X2_an:
+		print("Los numeros pseudoaleatorios provienen de una distribución uniforme")
+	else:
+		print("Los numeros pseudoaleatorios NO provienen de una distribución uniforme")
 
 # Prueba de series
 def series(numeros):
@@ -103,14 +114,54 @@ def series(numeros):
 	X2_0 = ((n**2)/(N - 1)) * X2_0
 	X2_a = chi2.ppf(1-alfa, (n**2)-1)
 
-	return True if X2_0 < X2_a else False
+	print("Valor del estadistico: ", X2_0)
+	print("Valor de chi cuadrado: ", X2_a)
+
+	if X2_0 < X2_a:
+		print("Los numeros pseudoaleatorios provienen de una distribución uniforme")
+	else:
+		print("Los numeros pseudoaleatorios NO provienen de una distribución uniforme")
 
 def kolmogorov_smirnov(numeros):
+	n = len(numeros)
+	F_0 = sorted(numeros) # # Distribucion acumulada hipotética
+	F_n = [] # Distribucion acumulada
+	D = 0 # Estadistico
+	alfa = float(input("Valor de Alfa: "))
+	d_an = kstwobign.ppf(1 - alfa/2) / (n**0.5) # Valor critico de Kolmogorov-Smirnov
+	
+	for i in range(1,n+1):
+		F_n.append(i/n)
+	
+	for i in range(0,n):
+		x = abs(F_n[i] - F_0[i])
+		if x > D:
+			D = x
 
-	return 0
+	print("Valor del estadístico: ", D)
+	print("Valor crítico: ", d_an)
+
+	if D < d_an:
+		print("Los numeros pseudoaleatorios provienen de una distribución uniforme")
+	else:
+		print("Los numeros pseudoaleatorios NO provienen de una distribución uniforme")
+	
 
 numeros_generados = leer_csv('generados.csv')
 print("Lista de números:", numeros_generados)
-# print(promedios(numeros_generados))
-# print(frecuencias(numeros_generados))
-print(series(numeros_generados))
+
+print("Realizar pruebas")
+print("1. Promedios")
+print("2. Frecuencias")
+print("3. Series")
+print("4. Kolmogorov-Smirnov")
+opc = int(input("->"))
+
+if opc == 1:
+	promedios(numeros_generados)
+elif opc == 2:
+	frecuencias(numeros_generados)
+elif opc == 3:
+	series(numeros_generados)
+elif opc == 4:
+	kolmogorov_smirnov(numeros_generados)
