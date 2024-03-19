@@ -37,11 +37,10 @@ def congruencial_mixto():
     # Escribir los números generados en un archivo CSV
     with open('generados.csv', mode='w', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow(['n;Xn;Generados'])
-        writer.writerow([f"0;{X_0}"])
-        for i in range(0, len(generados)):
-            writer.writerow([f"{i+1};{generados[i]};{normalizados[i]}"])
+        for i in range(0, len(normalizados)):
+            writer.writerow([normalizados[i]])
 
+    print("Periodo: ", len(normalizados))
     print("Archivo 'generados.csv' creado satisfactoriamente con los números generados.")
 
 def validar_mixto(a, c, m):
@@ -98,11 +97,10 @@ def congruencial_multiplicativo():
     # Escribir los números generados en un archivo CSV
     with open('generados.csv', mode='w', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow(['n;Xn;Generados'])
-        writer.writerow([f"0;{X_0}"])
-        for i in range(0, len(generados)):
-            writer.writerow([f"{i+1};{generados[i]};{normalizados[i]}"])
+        for i in range(0, len(normalizados)):
+            writer.writerow([normalizados[i]])
 
+    print("Periodo: ", len(normalizados))
     print("Archivo 'generados.csv' creado satisfactoriamente con los números generados.")
 
 def validar_multiplicativo(m):
@@ -147,12 +145,14 @@ def lagged_fibonacci():
 
     # Secuencia con los numeros generados
     generados = [x0, x1]
+    normalizados = [x0/mod, x1/mod]
     print("Números pseudoaleatorios generados:")    
     for x in range(0, n):
         # Calcular el próximo número pseudoaleatorio
         Xn = (generados[x - lag] + generados[x - lag + 1]) % mod
         generados.append(Xn)
-        print(Xn)
+        normalizados.append(Xn/mod)
+        print(Xn/mod)
 
 def bbs():
     # Parametros
