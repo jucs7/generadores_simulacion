@@ -127,13 +127,28 @@ def cuadrados_medios():
         print("Error: La semilla debe ser un numero de 4 digitos.")
         return
 
-    n = int(input("Ingrese la cantidad de números aleatorios a generar: "))
     print("Números pseudoaleatorios generados:")
     generados = []
-    for _ in range(n): 
+    semillas_generadas = set()  # Conjunto para almacenar semillas generadas
+
+    while True:
         semilla = int(str(semilla ** 2).zfill(8)[2:6])
-        generados.append(semilla / 10000)  # Normalizar para obtener números entre 0 y 1
-        print(semilla / 10000)
+        generado = semilla / 10000  # Normalizar para obtener números entre 0 y 1
+        
+        if semilla in semillas_generadas:  # Si la semilla ya ha sido generada, salir del bucle
+            break
+        
+        generados.append(generado)
+        semillas_generadas.add(semilla)
+        print(generado)
+
+    print("Periodo: ", len(generados))
+    # Escribir los números generados en un archivo CSV
+    with open('generados.csv', mode='w', newline='') as file:
+        writer = csv.writer(file)
+        for generado in generados:
+            writer.writerow([generado])
+    print("Archivo 'generados.csv' creado satisfactoriamente con los números generados.")
 
 def lagged_fibonacci():
     # Parametros
@@ -153,6 +168,12 @@ def lagged_fibonacci():
         generados.append(Xn)
         normalizados.append(Xn/mod)
         print(Xn/mod)
+    # Escribir los números generados en un archivo CSV
+    with open('generados.csv', mode='w', newline='') as file:
+        writer = csv.writer(file)
+        for i in range(0, len(normalizados)):
+            writer.writerow([normalizados[i]])
+    print("Archivo 'generados.csv' creado satisfactoriamente con los números generados.")
 
 def bbs():
     # Parametros
@@ -168,8 +189,14 @@ def bbs():
     generados = []
     for _ in range(n):
         semilla = (semilla * semilla) % modulus
-        generados.append(semilla)
-        print(semilla)
+        generados.append(round(semilla / modulus, 4))
+        print(round(semilla / modulus, 4))
+    # Escribir los números generados en un archivo CSV
+    with open('generados.csv', mode='w', newline='') as file:
+        writer = csv.writer(file)
+        for i in range(0, len(generados)):
+            writer.writerow([generados[i]])
+    print("Archivo 'generados.csv' creado satisfactoriamente con los números generados.")
 
 
 print("Generador: ")
